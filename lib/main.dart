@@ -30,14 +30,21 @@ class QuizPage extends StatefulWidget {
 }
 
 class _QuizPageState extends State<QuizPage> {
-  List<Icon> scoreKeeper = [];
+  //List<Icon> scoreKeeper = [];
+  int goodChoice = 0;
+  int badChoice = 0;
   void checkAnswer(bool userPickedAnswer) {
-    bool correctAnswer = quizBrain.getCorrectAnswer();
+    //bool correctAnswer = quizBrain.getCorrectAnswer();
 
     setState(() {
-      //TODO: Step 4 - Use IF/ELSE to check if we've reached the end of the quiz. If true, execute Part A, B, C, D.
       if (quizBrain.isFinished() == true) {
-        //TODO: Step 4 Part A - show an alert using rFlutter_alert (remember to read the docs for the package!)
+        if (userPickedAnswer == true) {
+          goodChoice++;
+          print('Good answer $goodChoice');
+        } else {
+          badChoice++;
+          print('Bad answer $badChoice');
+        }
         Alert(
           context: context,
           title: "Finished!",
@@ -54,27 +61,21 @@ class _QuizPageState extends State<QuizPage> {
           ],
         ).show();
         //HINT! Step 4 Part B is in the quiz_brain.dart
-        //TODO: Step 4 Part C - reset the questionNumber,
         quizBrain.reset();
-        //TODO: Step 4 Part D - empty out the scoreKeeper.
-        scoreKeeper.clear();
-      }
-      //TODO: Step 5 - If we've not reached the end, ELSE do the answer checking steps below 👇
-      else {
-        if (userPickedAnswer == correctAnswer) {
-          scoreKeeper.add(Icon(
-            Icons.check,
-            color: Colors.green,
-          ));
-          quizBrain.checkFinished();
+        //scoreKeeper.clear();
+      } else {
+        if (userPickedAnswer == true) {
+          goodChoice++;
+          print('Good answer $goodChoice');
         } else {
-          scoreKeeper.add(Icon(
-            Icons.close,
-            color: Colors.red,
-          ));
-          quizBrain.checkFinished();
+          badChoice++;
+          print('Bad answer $badChoice');
         }
         quizBrain.nextQuestion();
+        quizBrain.nextGoodAnswer();
+        quizBrain.nextBadAnswer();
+        print(quizBrain.getQnumber());
+        print(quizBrain.getQbankL());
       }
     });
   }
@@ -108,14 +109,14 @@ class _QuizPageState extends State<QuizPage> {
               textColor: Colors.white,
               color: Colors.green,
               child: Text(
-                'True',
+                quizBrain.getGoodAnswerText(),
                 style: TextStyle(
                   color: Colors.white,
                   fontSize: 20.0,
                 ),
               ),
               onPressed: () {
-                //The user picked true.
+                //The user picked good answer.
                 checkAnswer(true);
               },
             ),
@@ -127,23 +128,19 @@ class _QuizPageState extends State<QuizPage> {
             child: FlatButton(
               color: Colors.red,
               child: Text(
-                'False',
+                quizBrain.getBadAnswerText(),
                 style: TextStyle(
                   fontSize: 20.0,
                   color: Colors.white,
                 ),
               ),
               onPressed: () {
-                //The user picked false.
+                //The user picked bad answer.
                 checkAnswer(false);
-                quizBrain.checkFinished();
               },
             ),
           ),
         ),
-        Row(
-          children: scoreKeeper,
-        )
       ],
     );
   }

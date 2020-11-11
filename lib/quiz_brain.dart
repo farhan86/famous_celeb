@@ -1,34 +1,35 @@
 import 'question.dart';
+import 'answers.dart';
 
 class QuizBrain {
   int _questionNumber = 0;
+  int _goodAnswerNumber = 0;
+  int _badAnswerNumber = 0;
 
   List<Question> _questionBank = [
-    Question('Some cats are actually allergic to humans', true),
-    Question('You can lead a cow down stairs but not up stairs.', false),
-    Question('Approximately one quarter of human bones are in the feet.', true),
-    Question('A slug\'s blood is green.', true),
-    Question('Buzz Aldrin\'s mother\'s maiden name was \"Moon\".', true),
-    Question('It is illegal to pee in the Ocean in Portugal.', true),
+    Question('Dhele diben naki diben na? (Would you pour it or not?)'),
     Question(
-        'No piece of square dry paper can be folded in half more than 7 times.',
-        false),
+        'Koy takar icecream khaben? (How much would you pay for an icecream?)'),
+    Question('Kaua mori gese naki beche ase? (is the crow dead or not?)'),
     Question(
-        'In London, UK, if you happen to die in the House of Parliament, you are technically entitled to a state funeral, because the building is considered too sacred a place.',
-        true),
-    Question(
-        'The loudest sound produced by any animal is 188 decibels. That animal is the African Elephant.',
-        false),
-    Question(
-        'The total surface area of two human lungs is approximately 70 square metres.',
-        true),
-    Question('Google was originally called \"Backrub\".', true),
-    Question(
-        'Chocolate affects a dog\'s heart and nervous system; a few ounces are enough to kill a small dog.',
-        true),
-    Question(
-        'In West Virginia, USA, if you accidentally hit an animal with your car, you are free to take it home to eat.',
-        true),
+        'Kotogula photo akdine tulben? (how many photos would you take in a day?)'),
+    Question('Kibhabe spell korben? (which spelling would you choose?)'),
+  ];
+
+  List<Answers> _goodAnswer = [
+    Answers('Dhele dibo (I\'ll pour it)'),
+    Answers('Corona te no icecream (no ice cream during corona)'),
+    Answers('Aah?'),
+    Answers('3'),
+    Answers('Shiet'),
+  ];
+
+  List<Answers> _badAnswer = [
+    Answers('Dhele dibona (I won\'t pour it)'),
+    Answers('1 dollar'),
+    Answers('Android phone ar ...'),
+    Answers('69420'),
+    Answers('Shit'),
   ];
 
   void nextQuestion() {
@@ -37,32 +38,61 @@ class QuizBrain {
     }
   }
 
+  void nextGoodAnswer() {
+    if (_goodAnswerNumber < _goodAnswer.length - 1) {
+      _goodAnswerNumber++;
+    }
+  }
+
+  void nextBadAnswer() {
+    if (_badAnswerNumber < _badAnswer.length - 1) {
+      _badAnswerNumber++;
+    }
+  }
+
   String getQuestionText() {
     return _questionBank[_questionNumber].questionText;
   }
 
-  bool getCorrectAnswer() {
-    return _questionBank[_questionNumber].questionAnswer;
+  String getGoodAnswerText() {
+    return _goodAnswer[_goodAnswerNumber].questionAnswer;
+  }
+
+  String getBadAnswerText() {
+    return _badAnswer[_badAnswerNumber].questionAnswer;
+  }
+
+  // bool getCorrectAnswer() {
+  //   return _questionBank[_questionNumber].questionAnswer;
+  // }
+  int getQnumber() {
+    return _questionNumber;
+  }
+
+  int getQbankL() {
+    return _questionBank.length;
   }
 
   bool isFinished() {
-    if (_questionNumber < _questionBank.length - 1)
-      return false;
-    else
+    if (_questionNumber == _questionBank.length - 1)
       return true;
+    else
+      return false;
   }
 
   void checkFinished() {
     if (isFinished() == true) {
       print('End of quiz');
       print(_questionNumber);
+      print(_questionBank.length);
     }
   }
 
-  //TODO: Step 4 Part B - Create a reset() method here that sets the questionNumber back to 0.
   void reset() {
     if (isFinished() == true) {
       _questionNumber = 0;
+      _goodAnswerNumber = 0;
+      _badAnswerNumber = 0;
     }
   }
 }
