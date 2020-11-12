@@ -1,7 +1,9 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/physics.dart';
 import 'package:rflutter_alert/rflutter_alert.dart';
 import 'quiz_brain.dart';
+import 'result.dart';
 
 QuizBrain quizBrain = QuizBrain();
 
@@ -31,45 +33,32 @@ class QuizPage extends StatefulWidget {
 
 class _QuizPageState extends State<QuizPage> {
   //List<Icon> scoreKeeper = [];
-  int goodChoice = 0;
-  int badChoice = 0;
+
   void checkAnswer(bool userPickedAnswer) {
     //bool correctAnswer = quizBrain.getCorrectAnswer();
 
     setState(() {
       if (quizBrain.isFinished() == true) {
         if (userPickedAnswer == true) {
-          goodChoice++;
-          print('Good answer $goodChoice');
+          quizBrain.incrementGoodChoice();
         } else {
-          badChoice++;
-          print('Bad answer $badChoice');
+          quizBrain.incrementBadChoice();
         }
-        Alert(
-          context: context,
-          title: "Finished!",
-          desc: "You've reached the end of the quiz",
-          buttons: [
-            DialogButton(
-              child: Text(
-                "CANCEL",
-                style: TextStyle(color: Colors.white, fontSize: 20),
-              ),
-              onPressed: () => Navigator.pop(context),
-              width: 120,
-            )
-          ],
-        ).show();
-        //HINT! Step 4 Part B is in the quiz_brain.dart
-        quizBrain.reset();
-        //scoreKeeper.clear();
+        quizBrain.calculateResult();
+        String celebName = quizBrain.getCelebrityName();
+        String celebImage = quizBrain.getCelebrityImage();
+        String celebDescription = quizBrain.getCelebrityDescription();
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+              builder: (context) =>
+                  Result(celebName, celebImage, celebDescription)),
+        );
       } else {
         if (userPickedAnswer == true) {
-          goodChoice++;
-          print('Good answer $goodChoice');
+          quizBrain.incrementGoodChoice();
         } else {
-          badChoice++;
-          print('Bad answer $badChoice');
+          quizBrain.incrementBadChoice();
         }
         quizBrain.nextQuestion();
         quizBrain.nextGoodAnswer();
@@ -98,6 +87,18 @@ class _QuizPageState extends State<QuizPage> {
                   fontSize: 25.0,
                   color: Colors.white,
                 ),
+              ),
+            ),
+          ),
+        ),
+        Expanded(
+          flex: 5,
+          child: Padding(
+            padding: EdgeInsets.all(10.0),
+            child: Center(
+              child: Image(
+                image: AssetImage(
+                    'images/ggg.jpg'), // random image for future manipulation
               ),
             ),
           ),

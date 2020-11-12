@@ -1,10 +1,22 @@
+import 'package:famous_celeb/celebrity.dart';
+import 'package:flutter/material.dart';
+
 import 'question.dart';
 import 'answers.dart';
+import 'celebrity.dart';
+import 'dart:math';
 
 class QuizBrain {
   int _questionNumber = 0;
   int _goodAnswerNumber = 0;
   int _badAnswerNumber = 0;
+  int _goodChoice = 0;
+  int _badChoice = 0;
+  int _locator = 0;
+  String _celebrityName = 'choda';
+  String _celebrityImage = 'assets/images/ggg.jpg';
+  String _celebrityDescription = 'baal';
+  Random random = new Random();
 
   List<Question> _questionBank = [
     Question('Dhele diben naki diben na? (Would you pour it or not?)'),
@@ -31,6 +43,97 @@ class QuizBrain {
     Answers('69420'),
     Answers('Shit'),
   ];
+
+  List<Celebrity> _goodCelebrity = [
+    Celebrity('Keka Ferdousi', 'assets/images/keka.jpg',
+        'Apnar Noodles khub pochondo'),
+    Celebrity('Mahfuzur Rahman', 'assets/images/mahfuz.jpg',
+        'Apnar Gaaner gola khub bhalo'),
+  ];
+
+  List<Celebrity> _badCelebrity = [
+    Celebrity('Donald Trump', 'assets/images/donald.jpg', 'I Won The Election'),
+    Celebrity('Ananta Jalil', 'assets/images/jalil.jpg',
+        'Oshombhob k Shombhob korai apnar kaj'),
+  ];
+
+  void calculateResult() {
+    if (_goodChoice > _badChoice) {
+      _locator = random.nextInt(getGoodCelebrityLength());
+      _celebrityName = getGoodCelebrityName(_locator);
+      _celebrityImage = getGoodCelebrityImage(_locator);
+      _celebrityDescription = getGoodCelebrityDescription(_locator);
+      print('good celeb');
+    } else {
+      _locator = random.nextInt(getBadCelebrityLength());
+      _celebrityName = getBadCelebrityName(_locator);
+      _celebrityImage = getBadCelebrityImage(_locator);
+      _celebrityDescription = getBadCelebrityDescription(_locator);
+      print('bad celeb');
+    }
+  }
+
+  String getCelebrityName() {
+    return _celebrityName;
+  }
+
+  String getCelebrityImage() {
+    return _celebrityImage;
+  }
+
+  String getCelebrityDescription() {
+    return _celebrityDescription;
+  }
+
+  int getGoodCelebrityLength() {
+    return _goodCelebrity.length;
+  }
+
+  int getBadCelebrityLength() {
+    return _badCelebrity.length;
+  }
+
+  String getBadCelebrityDescription(int i) {
+    return _badCelebrity[i].description;
+  }
+
+  String getBadCelebrityName(int i) {
+    return _badCelebrity[i].name;
+  }
+
+  String getBadCelebrityImage(int i) {
+    return _badCelebrity[i].image;
+  }
+
+  String getGoodCelebrityDescription(int i) {
+    return _goodCelebrity[i].description;
+  }
+
+  String getGoodCelebrityName(int i) {
+    return _goodCelebrity[i].name;
+  }
+
+  String getGoodCelebrityImage(int i) {
+    return _goodCelebrity[i].image;
+  }
+
+  int getGoodChoiceNumber() {
+    return _goodChoice;
+  }
+
+  int getBadChoiceNumber() {
+    return _badChoice;
+  }
+
+  void incrementGoodChoice() {
+    _goodChoice++;
+    print('good choice: $_goodChoice');
+  }
+
+  void incrementBadChoice() {
+    _badChoice++;
+    print('bad choice: $_badChoice');
+  }
 
   void nextQuestion() {
     if (_questionNumber < _questionBank.length - 1) {
@@ -93,6 +196,8 @@ class QuizBrain {
       _questionNumber = 0;
       _goodAnswerNumber = 0;
       _badAnswerNumber = 0;
+      _goodChoice = 0;
+      _badChoice = 0;
     }
   }
 }
